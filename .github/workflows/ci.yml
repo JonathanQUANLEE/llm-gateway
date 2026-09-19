@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Prepare env
+        run: cp .env.example .env
+
+      - name: Validate docker-compose
+        run: docker compose config -q
+
+      - name: Python syntax check
+        run: python -m py_compile scripts/*.py
+
+      - name: Integration test (mock upstream)
+        run: |
+          python scripts/mock_upstream.py --port 9000 &
+          sleep 2
+          python scripts/channel_probe.py --url http://127.0.0.1:9000 --key ci-test --model mock-1
