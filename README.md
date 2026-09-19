@@ -3,7 +3,8 @@
 基于成熟开源组件编排的 **LLM API 聚合网关平台**：多上游渠道聚合、统一 OpenAI 兼容出口、
 令牌倍率计费、SSE 流式优化，配套渠道测活、故障演练、CI 集成回归的完整运维工具链。
 
-![CI](https://github.com/JonathanQUANLEE/llm-gateway/actions/workflows/ci.yml/badge.svg)
+![CI](https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)
+<!-- 账号 Actions 恢复后换回动态徽章: ![CI](https://github.com/JonathanQUANLEE/llm-gateway/actions/workflows/ci.yml/badge.svg) -->
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Stack](https://img.shields.io/badge/stack-NewAPI%20%7C%20MySQL%20%7C%20Redis%20%7C%20Nginx%20%7C%20NextChat-blue)
 
