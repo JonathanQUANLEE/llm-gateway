@@ -1,0 +1,10 @@
+# 密钥与环境
+.env
+
+# 运行时数据
+data/
+logs/
+
+# Python
+__pycache__/
+*.pyc
