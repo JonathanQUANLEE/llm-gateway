@@ -1,0 +1,16 @@
+{
+  "channels": [
+    {
+      "name": "示例-上游A",
+      "base_url": "https://api.example-upstream-a.com",
+      "api_key": "sk-REPLACE_ME",
+      "model": "deepseek-chat"
+    },
+    {
+      "name": "示例-上游B",
+      "base_url": "https://api.example-upstream-b.com",
+      "api_key": "sk-REPLACE_ME",
+      "model": "gpt-4o-mini"
+    }
+  ]
+}
