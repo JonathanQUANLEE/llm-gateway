@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RelayGate · LLM API 网关</title>
+<style>
+:root{
+  --bg:#0a0e13; --panel:#121821; --text:#e8eef5; --muted:#93a1b3;
+  --accent:#22c55e; --accent2:#38bdf8; --border:#223042;
+  --sans:-apple-system,"Segoe UI","Microsoft YaHei","PingFang SC",sans-serif;
+  --mono:"Cascadia Code",Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.75;font-size:16px}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+header{border-bottom:1px solid var(--border);padding:18px 0}
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.logo{font-size:19px;font-weight:800}
+.logo em{color:var(--accent);font-style:normal}
+nav{display:flex;gap:22px;flex-wrap:wrap}
+nav a{color:var(--muted);text-decoration:none;font-size:14px}
+nav a:hover{color:var(--text)}
+.hero{padding:72px 0 56px;text-align:center}
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(34,197,94,.4);color:var(--accent);border-radius:99px;padding:4px 14px;font-size:13px;margin-bottom:22px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+h1{font-size:42px;line-height:1.3}
+h1 span{color:var(--accent)}
+.hero p.sub{color:var(--muted);font-size:17px;margin-top:14px}
+.urlbox{margin-top:30px;display:inline-block;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 22px;font-family:var(--mono);font-size:15px}
+.urlbox b{color:var(--accent2);font-weight:600}
+section{padding:44px 0;border-top:1px solid var(--border)}
+h2{font-size:24px;margin-bottom:8px}
+h2::before{content:"";display:inline-block;width:4px;height:18px;background:var(--accent);margin-right:12px;border-radius:2px}
+.snote{color:var(--muted);font-size:14px;margin-bottom:22px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}
+th{background:rgba(56,189,248,.08);color:var(--accent2);text-align:left;font-weight:600}
+th,td{border:1px solid var(--border);padding:10px 12px;vertical-align:top}
+tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+td code{font-family:var(--mono);color:#7dd3fc;font-size:13px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:18px 0}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px}
+.card h3{font-size:16px;color:var(--accent);margin-bottom:10px}
+.card p,.card li{font-size:14px;color:var(--muted)}
+.card ol,.card ul{margin:8px 0 0 20px}
+.card li{margin:5px 0}
+pre{background:#0b1017;border:1px solid var(--border);border-radius:10px;padding:14px 16px;overflow-x:auto;font-size:13px;line-height:1.7;margin:12px 0}
+pre code{font-family:var(--mono);color:#a5d6ff}
+.tag{display:inline-block;font-size:11px;color:var(--accent);border:1px solid rgba(34,197,94,.4);border-radius:99px;padding:1px 10px;margin-left:8px;vertical-align:2px}
+details{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin:10px 0}
+summary{cursor:pointer;font-size:15px;font-weight:600}
+details p{color:var(--muted);font-size:14px;margin-top:10px}
+details code{font-family:var(--mono);color:#7dd3fc;font-size:13px}
+footer{border-top:1px solid var(--border);padding:28px 0;color:var(--muted);font-size:13px;text-align:center}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <div class="logo">Relay<em>Gate</em> · LLM API 网关</div>
+  <nav>
+    <a href="#price">模型与价格</a>
+    <a href="#start">快速开始</a>
+    <a href="#token">获取令牌</a>
+    <a href="#faq">常见问题</a>
+  </nav>
+</div></header>
+
+<div class="hero wrap">
+  <div class="badge"><span class="dot"></span>服务运行中 · OpenAI 兼容 · 流式输出</div>
+  <h1>一个 API Key，<br>调用<span>主流大模型</span></h1>
+  <p class="sub">多渠道聚合 · 统一 OpenAI 兼容出口 · 按量计费 · 全链路日志</p>
+  <div class="urlbox">API 地址（Base URL）：<b>http://localhost/v1</b></div>
+</div>
+
+<section id="price"><div class="wrap">
+  <h2>模型与价格</h2>
+  <p class="snote">倍率为计价刻度：1× = $2 / 百万输入 token；扣费 = tokens × 模型倍率 × 分组倍率，输出 token 另乘补全倍率。模型与倍率以控制台价格页为准，持续上架中。</p>
+  <table>
+    <tr><th>模型</th><th>倍率</th><th>说明</th></tr>
+    <tr><td><code>gpt-4o-mini</code></td><td>0.075×</td><td>轻量通用 · 输出另乘 4×（补全倍率）</td></tr>
+    <tr><td><code>gemini-flash</code></td><td>0.20×</td><td>高速推理档</td></tr>
+    <tr><td><code>deepseek-chat</code></td><td>0.14×</td><td>高性价比 · 补全倍率 4×</td></tr>
+    <tr><td><code>gpt-4o</code></td><td>1.25×</td><td>旗舰通用 · 输出另乘 4×</td></tr>
+    <tr><td><code>claude-sonnet</code></td><td>1.5×</td><td>代码与长文本强项</td></tr>
+  </table>
+  <p class="snote">> 换算：倍率 × $2 = 每 100 万输入 token 的美元价。</p>
+</div></section>
+
+<section id="start"><div class="wrap">
+  <h2>快速开始（三种方式）</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>① 网页客户端<span class="tag">零门槛</span></h3>
+      <ol>
+        <li>打开聊天页：<code>http://localhost:8080</code></li>
+        <li>输入访问码（见管理员）</li>
+        <li>设置中填接口地址 <code>http://localhost:3000</code> + 你的令牌</li>
+        <li>选择已上架的模型即可开始</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>② 开发工具接入<span class="tag">Cursor / Agent</span></h3>
+      <p>任何支持自定义 OpenAI 接口的工具（Cursor、Claude Code、各类 Coding Agent）：</p>
+      <pre><code>{
+  "apiKey": "sk-你的令牌",
+  "baseURL": "http://localhost/v1"
+}</code></pre>
+    </div>
+    <div class="card">
+      <h3>③ API 直调<span class="tag">curl / 代码</span></h3>
+      <pre><code>curl http://localhost/v1/chat/completions \
+  -H "Authorization: Bearer sk-你的令牌" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"gpt-4o-mini",
+       "messages":[{"role":"user","content":"hi"}]}'</code></pre>
+    </div>
+  </div>
+  <p class="snote">局域网访问：将 localhost 替换为网关主机的内网 IP（Windows 主机用 ipconfig 查询）。</p>
+</div></section>
+
+<section id="token"><div class="wrap">
+  <h2>获取令牌</h2>
+  <p class="snote">注册账号后即可自助创建令牌；额度与可用模型由管理员配置。</p>
+  <div class="cards">
+    <div class="card"><h3>用户</h3><ol><li>注册 / 登录控制台 <code>http://localhost:3000</code></li><li>令牌 → 添加（可设额度 / 有效期 / 模型范围）</li><li>复制 <code>sk-xxx</code>，按上述任一方式接入</li></ol></div>
+    <div class="card"><h3>管理员</h3><ol><li>控制台管理用户与分组（对应分组倍率折扣）</li><li>渠道页维护上游与模型上架</li><li>日志页处理用量与扣费查询</li></ol></div>
+  </div>
+</div></section>
+
+<section id="faq"><div class="wrap">
+  <h2>常见问题</h2>
+  <details><summary>报 401 Invalid token？</summary><p>令牌无效：确认复制完整（无空格 / 截断）、令牌状态正常、额度未用尽。报错中的 request id 可用于精确定位该次调用。</p></details>
+  <details><summary>报 503 No available channel？</summary><p>该模型未上架或对应渠道全部不可用。更换模型，或联系管理员处理渠道。</p></details>
+  <details><summary>报 429？</summary><p>触发限流：可能是每分钟请求数 / token 数超出限额，也可能是上游渠道繁忙。稍后重试；持续出现请提供 request id 反馈。</p></details>
+  <details><summary>流式输出卡住 / 断流？</summary><p>先更换网络或浏览器验证；长回答被截断通常与超时设置相关；仍有问题请携带报错截图与 request id 反馈。</p></details>
+  <details><summary>扣费如何计算？</summary><p>每次调用的 usage（输入 + 输出 token 数）× 模型倍率 × 分组倍率。注意：多轮对话中历史消息每轮都会重新计费，长对话费用递增属正常现象。</p></details>
+  <details><summary>数据安全吗？</summary><p>所有请求经网关服务器转发，客户端与上游凭证相互隔离。请勿在对话中提交密码、密钥等敏感信息。</p></details>
+</div></section>
+
+<footer class="wrap">
+  控制台 <code>http://localhost:3000</code> · 网页客户端 <code>http://localhost:8080</code> · API <code>http://localhost/v1</code><br>
+  Powered by New API · Nginx · NextChat — RelayGate
+</footer>
+
+</body>
+</html>
